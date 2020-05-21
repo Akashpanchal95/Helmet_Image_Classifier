@@ -22,8 +22,8 @@ import os
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
-# ap.add_argument("-d", "--dataset", required=True,
-# 	help="path to input dataset")
+ap.add_argument("-d", "--dataset", required=True,
+	help="path to input dataset")
 ap.add_argument("-m ", "--models",  required=True,
 	help="path to output model")
 ap.add_argument("-p", "--plot", default="plot_tester.png",
@@ -42,7 +42,7 @@ data = []
 labels = []
 
 # grab the image paths and randomly shuffle them
-imagePaths = sorted(list(paths.list_images(r'H:\Projects\HardHet_Detection\yolov3-Helmet-Detection-master\yolov3-Helmet-Detection-master\master_data\train')))
+imagePaths = sorted(list(paths.list_images(args['dataset'])))
 random.seed(42)
 random.shuffle(imagePaths)
 
@@ -63,7 +63,7 @@ for imagePath in imagePaths:
 # scale the raw pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
 labels = np.array(labels)
-print('labels',labels)
+
 # partition the data into training and testing splits using 75% of
 # the data for training and the remaining 25% for testing
 (trainX, testX, trainY, testY) = train_test_split(data,
@@ -72,7 +72,7 @@ print('labels',labels)
 # convert the labels from integers to vectors
 trainY = to_categorical(trainY, num_classes=2)
 testY = to_categorical(testY, num_classes=2)
-print('cat',testY)
+
 # construct the image generator for data augmentation
 aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
 	height_shift_range=0.1, shear_range=0.2, zoom_range=0.2,
